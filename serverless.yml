@@ -1,0 +1,27 @@
+# サービス名はアルファベットとハイフンのみ
+service: try-slack-slash-command
+
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+  wsgi:
+    app: app.app
+    # serverless-python-requirementsを使うので、こちらはfalse
+    packRequirements: false
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: dev
+  region: ap-northeast-1
+
+functions:
+  app:
+    handler: wsgi_handler.handler
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}
