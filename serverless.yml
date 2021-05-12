@@ -22,6 +22,8 @@ provider:
 functions:
   app:
     handler: wsgi_handler.handler
+    environment:
+      TFANDKUSU_SLACK_SIGNING_SECRET: ${ssm:/TFANDKUSU_SLACK_SIGNING_SECRET}
     events:
       - http: ANY /
       - http: ANY /{proxy+}
