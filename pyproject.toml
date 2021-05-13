@@ -9,6 +9,7 @@ license = "Apache-2.0 License"
 python = "^3.8"
 Flask = "^1.1.2"
 slack-sdk = "^3.5.1"
+boto3 = "^1.17.72"
 
 [tool.poetry.dev-dependencies]
 

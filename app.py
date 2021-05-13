@@ -1,7 +1,10 @@
 import os
+import json
 from flask import Flask
 from flask import request
 from slack_sdk.signature import SignatureVerifier
+import boto3
+
 app = Flask(__name__)
 
 
@@ -14,7 +17,13 @@ def hello():
         body = request.get_data().decode('utf-8')
         verifier = SignatureVerifier(signing_secret)
         if verifier.is_valid(body, timestamp, signature):
-            return "Hello %s" % request.form['text']
+            name = request.form['text']
+            client = boto3.client('lambda')
+            client.invoke(
+                FunctionName='try-slack-slash-command-dev-worker',
+                InvocationType='Event',
+                Payload=json.dumps({'name': name}))
+            return "Hello %s" % name
         else:
             raise "Verification error"
     else:
