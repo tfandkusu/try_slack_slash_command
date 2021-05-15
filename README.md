@@ -12,3 +12,4 @@ Pythonで[SlackのSlack Command](https://api.slack.com/interactivity/slash-comma
 - [Flask](https://flask.palletsprojects.com/en/2.0.x/)
 - [Python Slack SDK](https://slack.dev/python-slack-sdk/)
 - [boto3](https://aws.amazon.com/jp/sdk-for-python/) 時間のかかる処理は別Lambda関数で非同期に処理する。
+- [GitHub Actions](https://docs.github.com/ja/actions)
