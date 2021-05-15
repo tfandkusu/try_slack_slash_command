@@ -31,12 +31,12 @@ jobs:
       # - uses: actions/setup-python@v2
       #   with:
       #     python-version: 3.8
+      # Serverless インストール
+      - run: npm install -g serverless
       # Node.js ライブラリインストール
       - run: npm ci
       # Serverlessでデプロイする
-      - uses: serverless/github-action@master
-        with:
-          args: deploy
+      - run: serverless deploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
