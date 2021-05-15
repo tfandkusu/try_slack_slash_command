@@ -1,0 +1,38 @@
+name: deploy
+# ワークフロー実行タイミングは
+on:
+  # releaseブランチへのPUSH
+  push:
+    branches:
+      - release
+  # プルリクの作成と更新(TODO 後で消す)
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  deploy: # job名
+    # ubuntuで動かす
+    runs-on: ubuntu-latest
+    steps:
+      # 該当ブランチをチェックアウトする
+      - uses: actions/checkout@v2
+      # Node.js 環境構築
+      - uses: actions/setup-node@v1
+        with:
+          node-version: v14.x
+      # Python 環境構築
+      # - uses: actions/setup-python@v2
+      #   with:
+      #     python-version: 3.8
+      # Node.js ライブラリインストール
+      - run: npm ci
+      # Serverlessでデプロイする
+      - uses: serverless/github-action@master
+        with:
+          args: deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
