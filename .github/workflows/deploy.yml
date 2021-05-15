@@ -21,20 +21,21 @@ jobs:
       - uses: actions/checkout@v2
       # dockerコマンドを使えるようにする
       - uses: docker/setup-buildx-action@v1
-        with:
-          install: true
       # Node.js 環境構築
       - uses: actions/setup-node@v1
         with:
           node-version: v14.x
       # Python 環境構築
-      # - uses: actions/setup-python@v2
-      #   with:
-      #     python-version: 3.8
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
       # Serverless インストール
       - run: npm install -g serverless
       # Node.js ライブラリインストール
       - run: npm ci
+      # Poetryのインストール
+      - run: python -m pip install --upgrade pip
+      - run: pip install poetry
       # Serverlessでデプロイする
       - run: serverless deploy
         env:
