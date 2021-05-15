@@ -1,0 +1,38 @@
+name: deploy
+# ワークフロー実行タイミングは
+on:
+  # releaseブランチへのPUSH
+  push:
+    branches:
+      - release
+
+jobs:
+  deploy: # job名
+    # ubuntuで動かす
+    runs-on: ubuntu-latest
+    steps:
+      # 該当ブランチをチェックアウトする
+      - uses: actions/checkout@v2
+      # dockerコマンドを使えるようにする
+      # serverless-python-requirements プラグインで使う
+      - uses: docker/setup-buildx-action@v1
+      # Node.js 環境構築
+      - uses: actions/setup-node@v1
+        with:
+          node-version: v14.x
+      # Python 環境構築
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      # Serverless インストール
+      - run: npm install -g serverless
+      # Node.js ライブラリインストール
+      - run: npm ci
+      # Poetry インストール
+      - run: python -m pip install --upgrade pip
+      - run: pip install poetry
+      # Serverlessでデプロイする
+      - run: serverless deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
