@@ -19,6 +19,7 @@ provider:
   stage: dev
   region: ap-northeast-1
   iamRoleStatements:
+    # Lambdaから別Lambdaを呼び出すためのロールの設定
     - Effect: Allow
       Action:
         - 'lambda:InvokeFunction'
@@ -26,12 +27,15 @@ provider:
 
 functions:
   app:
+    # HTTPSサーバ相当のLambda
     handler: wsgi_handler.handler
     environment:
       TFANDKUSU_SLACK_SIGNING_SECRET: ${ssm:/TFANDKUSU_SLACK_SIGNING_SECRET}
     events:
+      # API Gatewayの設定
       - http: ANY /
       - http: ANY /{proxy+}
 
   worker:
+    # 非同期で実行したい時間がかかる処理のLambda
     handler: worker.handle
